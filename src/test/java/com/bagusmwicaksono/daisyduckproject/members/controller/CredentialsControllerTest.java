@@ -23,7 +23,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @WebFluxTest(CredentialsController.class)
-public class CredentialsControllerTest {
+class CredentialsControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
