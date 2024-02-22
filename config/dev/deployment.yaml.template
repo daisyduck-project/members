@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: members
+spec:
+  selector:
+    app: members
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: members
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: members
+  template:
+    metadata:
+      labels:
+        app: members
+    spec:
+      containers:
+        - name: members
+          image: members:{{version}}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: members-application-config
+              mountPath: /app/config
+      volumes:
+        - name: members-application-config
+          configMap:
+            name: members-config
