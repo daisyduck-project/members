@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bagusmwicaksono.daisyduckproject.members.controller.dto.CredentialsDto;
+import com.bagusmwicaksono.daisyduckproject.members.exception.DuplicatedCredentialException;
 import com.bagusmwicaksono.daisyduckproject.members.model.Credentials;
 import com.bagusmwicaksono.daisyduckproject.members.repository.CredentialsRepository;
 import com.bagusmwicaksono.daisyduckproject.members.utils.TestUtils;
@@ -73,6 +74,7 @@ public class CredentialsServiceTest {
         Mono<CredentialsDto> resultDto = credentialsService.performCreateCredential(newCredentialsDto);
 
         StepVerifier.create(resultDto)
-            .expectError().verify();
+            .expectErrorMatches(throwable -> throwable instanceof DuplicatedCredentialException)
+            .verify();
     }
 }
