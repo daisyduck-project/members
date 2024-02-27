@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
+import org.bson.assertions.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bagusmwicaksono.daisyduckproject.members.controller.dto.CredentialsDto;
+import com.bagusmwicaksono.daisyduckproject.members.exception.CredentialNotFoundException;
 import com.bagusmwicaksono.daisyduckproject.members.exception.DuplicatedCredentialException;
 import com.bagusmwicaksono.daisyduckproject.members.model.Credentials;
 import com.bagusmwicaksono.daisyduckproject.members.repository.CredentialsRepository;
@@ -58,9 +60,9 @@ public class CredentialsServiceTest {
         Mono<CredentialsDto> resultDto = credentialsService.performCreateCredential(newCredentialsDto);
 
         StepVerifier.create(resultDto).consumeNextWith(newCred -> {
-            assertEquals(newCred.getId(), newCred.getId());
-            assertEquals(newCred.getEmail(), newCred.getEmail());
-            assertEquals(newCred.getUsername(), newCred.getUsername());
+            assertEquals(newCred.getId(), credentials.getId());
+            assertEquals(newCred.getEmail(), credentials.getEmail());
+            assertEquals(newCred.getUsername(), credentials.getUsername());
         }).verifyComplete();
     }
     @Test
@@ -75,6 +77,40 @@ public class CredentialsServiceTest {
 
         StepVerifier.create(resultDto)
             .expectErrorMatches(throwable -> throwable instanceof DuplicatedCredentialException)
+            .verify();
+    }
+    @Test
+    void performLogin_whenSuccess_returnValidResponse() throws StreamReadException, DatabindException, IOException{
+        Credentials credentials = TestUtils.getCredentialTestData();
+
+        when(credentialsRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(Mono.just(credentials));
+
+        CredentialsDto cred = new CredentialsDto();
+        BeanUtils.copyProperties(credentials, cred);
+
+        Mono<CredentialsDto> resultDto = credentialsService.performLogin(cred);
+
+        StepVerifier.create(resultDto).consumeNextWith(foundCred ->{
+            assertEquals(foundCred.getEmail(), credentials.getEmail());
+            assertEquals(foundCred.getPassword(), credentials.getPassword());
+            assertEquals(foundCred.getId(), credentials.getId());
+        }).verifyComplete();
+
+    }
+
+    @Test
+    void performLogin_whenNotFOund_returnNotfoundError() throws StreamReadException, DatabindException, IOException{
+        Credentials credentials = TestUtils.getCredentialTestData();
+
+        when(credentialsRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(Mono.empty());
+
+        CredentialsDto cred = new CredentialsDto();
+        BeanUtils.copyProperties(credentials, cred);
+
+        Mono<CredentialsDto> resultDto = credentialsService.performLogin(cred);
+
+        StepVerifier.create(resultDto)
+            .expectError()
             .verify();
     }
 }

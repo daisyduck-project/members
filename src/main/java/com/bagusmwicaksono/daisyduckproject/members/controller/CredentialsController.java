@@ -1,5 +1,6 @@
 package com.bagusmwicaksono.daisyduckproject.members.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,15 +26,24 @@ public class CredentialsController {
     }
     
     @PostMapping("")
+    @CrossOrigin(origins = "*")
     public Mono<CredentialsDto> createCred(@RequestBody CredentialsDto credDto){
         log.info("[CredentialsController] createCred credDto="+credDto.toString());
         return credentialsService.performCreateCredential(credDto);
     }
 
     @GetMapping("")
+    @CrossOrigin(origins = "*")
     public Flux<CredentialsDto> getAllCred() {
         log.info("[CredentialsController] getAllCred");
         return credentialsService.getAllCredentials();
+    }
+
+    @PostMapping("/login")
+    @CrossOrigin(origins = "*")
+    public Mono<CredentialsDto> performLogin(@RequestBody CredentialsDto credDto){
+        log.info("[CredentialsController] performLogin credDto="+credDto.toString());
+        return credentialsService.performLogin(credDto);
     }
     
 }

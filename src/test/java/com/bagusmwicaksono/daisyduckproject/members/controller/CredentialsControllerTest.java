@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.bagusmwicaksono.daisyduckproject.members.controller.dto.CredentialsDto;
+import com.bagusmwicaksono.daisyduckproject.members.exception.CredentialNotFoundException;
 import com.bagusmwicaksono.daisyduckproject.members.exception.DuplicatedCredentialException;
 import com.bagusmwicaksono.daisyduckproject.members.service.CredentialsService;
 import com.bagusmwicaksono.daisyduckproject.members.utils.TestUtils;
@@ -64,5 +65,30 @@ class CredentialsControllerTest {
             .exchange()
             .expectStatus().isOk()
             .expectBodyList(CredentialsDto.class);
+    }
+
+    @Test
+    void performLogin_WhenSuccess_ShouldReturnValid() throws StreamReadException, DatabindException, BeansException, IOException {
+        CredentialsDto credentialsDto = TestUtils.getCredentialDtoTestData();
+        
+        when(credentialsService.performLogin(any())).thenReturn(Mono.just(credentialsDto));
+
+        webTestClient.post().uri("/v1/creds/login")
+            .bodyValue(credentialsDto)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBodyList(CredentialsDto.class);
+    }
+
+    @Test
+    void performLogin_WheNotFound_ShouldReturnError() throws StreamReadException, DatabindException, BeansException, IOException {
+        CredentialsDto credentialsDto = TestUtils.getCredentialDtoTestData();
+        
+        when(credentialsService.performLogin(any())).thenThrow(new CredentialNotFoundException(credentialsDto.getEmail()));
+
+        webTestClient.post().uri("/v1/creds/login")
+            .bodyValue(credentialsDto)
+            .exchange()
+            .expectStatus().isNotFound();
     }
 }

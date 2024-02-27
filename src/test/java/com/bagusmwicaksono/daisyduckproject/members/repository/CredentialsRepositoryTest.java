@@ -1,6 +1,8 @@
 package com.bagusmwicaksono.daisyduckproject.members.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -52,5 +54,21 @@ public class CredentialsRepositoryTest {
         StepVerifier.create(isCredentialExist).consumeNextWith(isExist ->{
             assertTrue(isExist);
         }).verifyComplete();
+    }
+
+    @Test
+    void findByEmailAndPassword_whenCredentialExist_returnValue() {
+        Mono<Credentials> cred = credentialsRepository.save(credentials).then(credentialsRepository.findByEmailAndPassword(credentials.getEmail(), credentials.getPassword()));
+        StepVerifier.create(cred).consumeNextWith(foundCred ->{
+            assertNotNull(foundCred);
+            assertEquals(foundCred.getId(), credentials.getId());
+            assertEquals(foundCred.getEmail(), credentials.getEmail());
+        }).verifyComplete();
+    }
+
+    @Test
+    void findByEmailAndPassword_whenNotFound_emmitNothing() {
+        Mono<Credentials> cred = credentialsRepository.save(credentials).then(credentialsRepository.findByEmailAndPassword("fake", "fake"));
+        StepVerifier.create(cred).expectNextCount(0).verifyComplete();
     }
 }

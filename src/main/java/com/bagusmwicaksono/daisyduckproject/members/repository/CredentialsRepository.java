@@ -8,4 +8,5 @@ import reactor.core.publisher.Mono;
 
 public interface CredentialsRepository extends ReactiveMongoRepository<Credentials, String> {
     Mono<Boolean> existsByEmail(String email);
+    Mono<Credentials> findByEmailAndPassword(String email, String password);
 }

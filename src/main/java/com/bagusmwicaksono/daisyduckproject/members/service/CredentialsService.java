@@ -1,5 +1,7 @@
 package com.bagusmwicaksono.daisyduckproject.members.service;
 
+import javax.security.auth.login.CredentialNotFoundException;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -43,5 +45,15 @@ public class CredentialsService {
             BeanUtils.copyProperties(cred, dto);
             return dto;
         });
+    }
+    public Mono<CredentialsDto> performLogin(CredentialsDto newCredential){
+        log.info("[CredentialsService] performLogin");
+        return credentialsRepository.findByEmailAndPassword(newCredential.getEmail(), newCredential.getPassword())
+            .map(found->{
+                CredentialsDto dto = new CredentialsDto();
+                BeanUtils.copyProperties(found, dto);
+                return dto;
+            })
+            .switchIfEmpty(Mono.error(new CredentialNotFoundException(newCredential.getEmail())));
     }
 }
