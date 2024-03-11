@@ -1,8 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://admin:root@cluster0.vwpz2pv.mongodb.net/members_db?retryWrites=true&w=majority
-      database: members_db
+      uri: ${MONGO_URI:mongodb://localhost:27017/members_db}
 logging:
   level:
     root: info

@@ -10,6 +10,13 @@ spec:
       targetPort: 8080
   type: NodePort
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+   name: members-config
+data:
+ uri: mongodb://host.minikube.internal:27017/members_db
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,14 +33,13 @@ spec:
     spec:
       containers:
         - name: members
-          image: members:{{version}}
+          image: members:0.0.1-SNAPSHOT
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
-          volumeMounts:
-            - name: members-application-config
-              mountPath: /app/config
-      volumes:
-        - name: members-application-config
-          configMap:
-            name: members-config
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: members-config  
+                  key: uri
