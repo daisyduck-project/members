@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: members
-          image: members:0.0.1-SNAPSHOT
+          image: members
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
