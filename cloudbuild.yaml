@@ -1,6 +1,4 @@
 steps:
-options:
-  logging: CLOUD_LOGGING_ONLY
 - name: gradle:8-jdk21
   entrypoint: gradle
   args: ['--version']
@@ -20,3 +18,5 @@ options:
         '--source', 'members'
         ]
 images: ["us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members"]
+options:
+  logging: CLOUD_LOGGING_ONLY
