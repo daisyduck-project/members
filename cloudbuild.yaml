@@ -9,10 +9,12 @@ steps:
   entrypoint: gradle
   args: ['assemble']
 - name: gcr.io/cloud-builders/docker
-  args: ["build", "-t", "us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members", "--build-arg=JAR_FILE=build/libs/members-0.0.1-SNAPSHOT.jar", "."]  
+  args: ["build", "-t", "us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members", "."]  
 - name: google/cloud-sdk
   args: ['gcloud', 'deploy', 'releases', 'create', 'member-release-${SHORT_SHA}',
         '--images', 'image1=us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members',
-        '--region', 'us-central1'
+        '--region', 'us-central1',
+        '--delivery-pipeline', 'members-delivery-pipeline',
+        '--source', 'members'
         ]
 images: ["us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members"]
