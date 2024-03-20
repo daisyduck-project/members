@@ -7,7 +7,7 @@
     args: ['test']
   - name: gradle:8-jdk21
     entrypoint: gradle
-    args: ['assemble']
+    args: ['build']
   - name: gcr.io/cloud-builders/docker
     args: ["build", "-t", "us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members", "--build-arg=JAR_FILE=build/libs/build/libs/members-0.0.1-SNAPSHOT.jar", "."]
   images: ["us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members"]
