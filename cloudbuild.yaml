@@ -14,8 +14,7 @@ steps:
   args: ['gcloud', 'deploy', 'releases', 'create', 'member-release-${SHORT_SHA}',
         '--images', 'image1=us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members',
         '--region', 'us-central1',
-        '--delivery-pipeline', 'members-delivery-pipeline',
-        '--source', 'members'
+        '--delivery-pipeline', 'members-delivery-pipeline'
         ]
 images: ["us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members"]
 options:
