@@ -1,11 +1,11 @@
   steps:
-  - name: gradle:8-jdk17
+  - name: gradle:8-jdk21
     entrypoint: gradle
     args: ['--version']
-  - name: gradle:8-jdk17
+  - name: gradle:8-jdk21
     entrypoint: gradle
     args: ['test']
-  - name: gradle:8-jdk17
+  - name: gradle:8-jdk21
     entrypoint: gradle
     args: ['assemble']
   - name: gcr.io/cloud-builders/docker
