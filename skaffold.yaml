@@ -4,9 +4,25 @@ metadata:
   name: members
 build:
   artifacts:
-    - image: members
-      docker:
-        dockerfile: Dockerfile
+  - image: gcr.io/daisyduck-reborn/members
+    docker:
+      dockerfile: Dockerfile
 manifests:
   rawYaml:
     - config/dev/application.deployment.yaml
+deploy:
+  kubectl: {}
+profiles:
+  - name: staging
+    build:
+      googleCloudBuild: 
+        projectId: daisyduck-reborn
+      artifacts:
+      - image: gcr.io/daisyduck-reborn/members
+        docker:
+          dockerfile: Dockerfile
+    manifests:
+      rawYaml:
+      - config/stag/application.deployment.yaml
+    deploy:
+      kubectl: {}

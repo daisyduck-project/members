@@ -15,7 +15,7 @@ kind: ConfigMap
 metadata:
    name: members-config
 data:
- uri: mongodb://host.minikube.internal:27017/members_db
+ uri: mongodb+srv://admin:root@cluster0.vwpz2pv.mongodb.net/members_db?retryWrites=true&w=majority
 ---
 apiVersion: apps/v1
 kind: Deployment
