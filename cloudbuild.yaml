@@ -1,10 +1,10 @@
 steps:
 #Testing
-- name: 'gcr.io/cloud-builders/gradle' 
+- name: 'gradle:8-jdk21' 
   entrypoint: 'gradle'
   args: ['test']
 #Gradle build
-- name: 'gcr.io/cloud-builders/gradle' 
+- name: 'gradle:8-jdk21' 
   entrypoint: 'gradle'
   args: ['assemble']
 #step 2
