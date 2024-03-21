@@ -28,14 +28,14 @@ steps:
    'image', 
    'deployment', 
    'members', 
-   'members=gcr.io/daisyduck-reborn/members:$TAG_NAME'
+   'members=gcr.io/daisyduck-reborn/members:${COMMIT_SHA}'
   ]
   env:
-  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c>'
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
   - 'CLOUDSDK_CONTAINER_CLUSTER=staging'
 # push images to Google Container Registry with tags
 images: [
-   'gcr.io/daisyduck-reborn/members:$TAG_NAME'
+   'gcr.io/daisyduck-reborn/members:${COMMIT_SHA}'
   ]
 options:
   logging: CLOUD_LOGGING_ONLY
