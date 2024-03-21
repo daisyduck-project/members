@@ -1,17 +1,41 @@
 steps:
-- name: gradle:8-jdk21
-  entrypoint: gradle
-  args: ['--version']
-- name: gradle:8-jdk21
-  entrypoint: gradle
+#Testing
+- name: 'gcr.io/cloud-builders/gradle' 
+  entrypoint: 'gradle'
   args: ['test']
-- name: gradle:8-jdk21
-  entrypoint: gradle
+#Gradle build
+- name: 'gcr.io/cloud-builders/gradle' 
+  entrypoint: 'gradle'
   args: ['assemble']
+#step 2
 - name: gcr.io/cloud-builders/docker
-  args: ["build", "-t", "us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members:${COMMIT_SHA}", "."]
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members:${COMMIT_SHA}']
-images: ["us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members:${COMMIT_SHA}"]
+  args: [
+   'build', 
+   '-t', 
+   'us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members:${COMMIT_SHA}',
+   '.'
+  ]
+#step 3
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['apply', '-f', 'config/stag/application.deployment.yaml']
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=staging'
+#step 4
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: [
+   'set', 
+   'image', 
+   'deployment', 
+   'members', 
+   'members=gcr.io/daisyduck-reborn/members:$TAG_NAME'
+  ]
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-c>'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=staging'
+# push images to Google Container Registry with tags
+images: [
+   'gcr.io/daisyduck-reborn/members:$TAG_NAME'
+  ]
 options:
   logging: CLOUD_LOGGING_ONLY
