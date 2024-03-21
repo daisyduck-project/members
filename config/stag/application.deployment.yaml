@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: members
-          image: gcr.io/daisyduck-reborn/members
+          image: gcr.io/daisyduck-reborn/members:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

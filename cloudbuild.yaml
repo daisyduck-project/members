@@ -12,7 +12,9 @@ steps:
   args: [
    'build', 
    '-t', 
-   'us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members:${COMMIT_SHA}',
+   'gcr.io/daisyduck-reborn/members:${COMMIT_SHA}',
+   '-t', 
+   'gcr.io/daisyduck-reborn/members:latest',
    '.'
   ]
 #step 3
@@ -35,7 +37,8 @@ steps:
   - 'CLOUDSDK_CONTAINER_CLUSTER=staging'
 # push images to Google Container Registry with tags
 images: [
-   'gcr.io/daisyduck-reborn/members:${COMMIT_SHA}'
+   'gcr.io/daisyduck-reborn/members:${COMMIT_SHA}',
+   'gcr.io/daisyduck-reborn/members:latest'
   ]
 options:
   logging: CLOUD_LOGGING_ONLY
