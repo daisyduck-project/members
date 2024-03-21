@@ -12,16 +12,6 @@ steps:
   args: ["build", "-t", "us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members:${COMMIT_SHA}", "."]
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members:${COMMIT_SHA}']
-- name: gcr.io/google.com/cloudsdktool/cloud-sdk
-  entrypoint: gcloud
-  args:
-    [
-      "deploy", "releases", "create", "member-release-${SHORT_SHA}",
-      "--delivery-pipeline", "members-delivery-pipeline",
-      "--region", "us-central1",
-      "--annotations", "commitId=${REVISION_ID}",
-      "--images", "image1=us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members:${COMMIT_SHA}"
-    ]
 images: ["us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members:${COMMIT_SHA}"]
 options:
   logging: CLOUD_LOGGING_ONLY
