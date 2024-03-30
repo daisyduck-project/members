@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import org.bson.assertions.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,7 +15,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.bagusmwicaksono.daisyduckproject.members.controller.dto.CredentialsDto;
-import com.bagusmwicaksono.daisyduckproject.members.exception.CredentialNotFoundException;
 import com.bagusmwicaksono.daisyduckproject.members.exception.DuplicatedCredentialException;
 import com.bagusmwicaksono.daisyduckproject.members.model.Credentials;
 import com.bagusmwicaksono.daisyduckproject.members.repository.CredentialsRepository;

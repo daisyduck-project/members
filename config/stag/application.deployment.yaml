@@ -2,18 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: members
-  annotations:
-    networking.gke.io/load-balancer-type: "Internal"
 spec:
   selector:
     app: members
   ports:
-    - name: tcp-port
-      protocol: TCP
-      port: 8080
+    - port: 8080
       targetPort: 8080
-  type: LoadBalancer
-  externalTrafficPolicy: Cluster
+  type: NodePort
 ---
 apiVersion: v1
 kind: ConfigMap
