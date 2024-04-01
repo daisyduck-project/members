@@ -18,13 +18,15 @@ steps:
    '.'
   ]
 #Create Release
-- name: 'google/cloud-sdk'
-  args: ['gcloud', 'deploy', 'releases', 'create', 'member-release-${SHORT_SHA}',
-        '--images', 'image1=us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members',
-        '--region', 'us-central1',
-        '--delivery-pipeline', 'members-delivery-pipeline',
-        '--from-k8s-manifest', 'config/stag/application.deployment.yaml'
-        ]
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args: [
+      "deploy", "releases", "create", "member-release-${SHORT_SHA}",
+      "--delivery-pipeline", "members-delivery-pipeline",
+      "--region", "us-central1",
+      "--annotations", "commitId=${REVISION_ID}",
+      "--from-k8s-manifest", "config/stag/application.deployment.yaml"
+    ]
 
 # push images to Google Container Registry with tags
 images: [
