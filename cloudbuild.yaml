@@ -23,8 +23,7 @@ steps:
         '--images', 'image1=us-central1-docker.pkg.dev/daisyduck-reborn/daisyduck-repo/members',
         '--region', 'us-central1',
         '--delivery-pipeline', 'members-delivery-pipeline',
-        '--from-k8s-manifest', 'config/stag/application.deployment.yaml',
-        '--source', 'members'
+        '--from-k8s-manifest', 'config/stag/application.deployment.yaml'
         ]
 
 # push images to Google Container Registry with tags
