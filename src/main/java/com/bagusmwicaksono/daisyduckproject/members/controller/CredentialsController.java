@@ -28,7 +28,7 @@ public class CredentialsController {
     @PostMapping("")
     @CrossOrigin(origins = "*")
     public Mono<CredentialsDto> createCred(@RequestBody CredentialsDto credDto){
-        log.info("[CredentialsController] createCred credDto="+credDto.toString());
+        log.info("[CredentialsController] createCred updated credDto="+credDto.toString());
         return credentialsService.performCreateCredential(credDto);
     }
 
